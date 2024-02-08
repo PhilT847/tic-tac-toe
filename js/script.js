@@ -4,58 +4,117 @@ const game = createGameController();
 
 function createGameController() {
 
-    const gameBoard = createGameBoard();
-    const player1 = createPlayer("Player 1");
-    const player2 = createPlayer("Player 2");
+    const gameBoard = createGameBoard(this);
 
-    gameBoard.resetBoard();
+    const playerList = [];
+
+    let currentPlayerIndex = 0;
+    let currentPlayer = null;
+
+    const getCurrentPlayerIndex = () => {
+
+        return currentPlayerIndex;
+    }
+
+    const resetGame = () => {
+
+        playerList = [];
+        playerList.push(createPlayer("Player 1"));
+        playerList.push(createPlayer("Player 2"));
+
+        currentPlayerIndex = 0;
+        currentPlayer = playerList[currentPlayerIndex];
+
+        gameBoard.resetBoard();
+    }
+
+    const nextTurn = () => {
+
+        currentPlayerIndex++;
+
+        if(currentPlayerIndex > playerList.length) {
+
+            currentPlayerIndex = 0;
+        }
+
+        currentPlayer = playerList[currentPlayerIndex];
+    }
+
+    // Start game by resetting
+    resetGame();
+
+    return { getCurrentPlayerIndex, resetGame, nextTurn };
 }
 
-function createGameBoard() {
+function createGameBoard(gc) {
 
-    const boardContainer = document.querySelector("hey");
-    const boardValues = [];
+    const gameController = gc;
+    const boardContainer = document.querySelector("board-container");
     const tiles = [];
 
     const resetBoard = () => {
 
-        boardValues = [];
+        for(let i = 0; i < 9; i++) {
+
+            tiles.push(createTile(boardContainer));
+        }
+
+        updateBoard();
+    };
+
+    const updateBoard = () => {
 
         for(let i = 0; i < 9; i++) {
 
-            boardValues.push("empty");
-            tiles.push(createTile());
-        }
-
-        updateVisual();
-    };
-
-    const updateVisual = () => {
-
-        for(let i = 0; i < 9; i++) {
-
-            tiles[i].setVisual();
+            tiles[i].updateTile();
         }
     };
 
-    return {resetBoard, updateVisual};
+    return { gameController, boardContainer, resetBoard, updateBoard };
 }
 
-function createTile() {
+function createTile(gb) {
 
-    const setVisual = (value) => {
+    // Create tile element and add to document
+    const tileElement = document.createElement("button");
+    tileElement.classList.add("tile");
+    tileElement.addEventListener("click", placeChip());
+
+    const gameBoard = gb;
+    gameBoard.boardContainer.appendChild(tileElement);
+
+    let value = -1;
+
+    const placeChip = () => {
+
+        value = gb.gameController.getCurrentPlayerIndex();
+
+        updateTile();
+    }
+
+    const updateTile = () => {
 
         switch(value) {
-            case "X":
+
+            case 0:
+
+                tileElement.style.backgroundColor = "red";
                 break;
-            case "O":
+
+            case 1:
+
+                tileElement.style.backgroundColor = "blue";
                 break;
+
             default:
+
+                tileElement.style.backgroundColor = "white";
                 break;
+
         }
     };
 
-    return { setVisual };
+    return { updateTile };
 }
 
 function createPlayer(name) {

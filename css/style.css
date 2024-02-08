@@ -58,10 +58,27 @@ table {
 /* END Meyer Reset */
 
 body {
+    width: 100vw;
+    height: 100vh;
     display: grid;
-    grid-template-rows: 1fr 4fr;
+    grid-template-rows: 3em 1fr;
 }
 
-.game-board {
+.header {
+    background-color: greenyellow;
+}
+
+.game-area {
+
+}
+
+.board-container {
+    background-color: blue;
+    margin: 0 auto;
+    height: min(75vh, 75vw); /* always fit on screen */
+    aspect-ratio: 1 / 1;
+}
+
+.tile {
 
 }
