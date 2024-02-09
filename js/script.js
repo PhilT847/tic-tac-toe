@@ -1,20 +1,14 @@
 /* script.js */
 
-const game = createGameController();
+let currentPlayerIndex = 0;
 
-function createGameController() {
+// IIFE / module pattern for game controller
+const gameController = (function () {
 
-    const gameBoard = createGameBoard(this);
-
-    const playerList = [];
-
+    const gameBoard = createGameBoard();
+    let playerList = [];
     let currentPlayerIndex = 0;
     let currentPlayer = null;
-
-    const getCurrentPlayerIndex = () => {
-
-        return currentPlayerIndex;
-    }
 
     const resetGame = () => {
 
@@ -24,11 +18,11 @@ function createGameController() {
 
         currentPlayerIndex = 0;
         currentPlayer = playerList[currentPlayerIndex];
-
-        gameBoard.resetBoard();
     }
 
     const nextTurn = () => {
+
+        let prev = currentPlayerIndex;
 
         currentPlayerIndex++;
 
@@ -40,56 +34,54 @@ function createGameController() {
         currentPlayer = playerList[currentPlayerIndex];
     }
 
-    // Start game by resetting
-    resetGame();
+    return { currentPlayerIndex, resetGame, nextTurn };
 
-    return { getCurrentPlayerIndex, resetGame, nextTurn };
-}
+})();
 
-function createGameBoard(gc) {
+function createGameBoard() {
 
-    const gameController = gc;
-    const boardContainer = document.querySelector("board-container");
-    const tiles = [];
+    let tiles = [];
 
-    const resetBoard = () => {
+    const buildBoard = () => {
+
+        tiles = [];
 
         for(let i = 0; i < 9; i++) {
 
-            tiles.push(createTile(boardContainer));
+            const newTile = createTile();
+
+            tiles.push(newTile);
         }
 
         updateBoard();
-    };
+    }
 
     const updateBoard = () => {
 
-        for(let i = 0; i < 9; i++) {
+        for(let i = 0; i < tiles.length; i++) {
 
             tiles[i].updateTile();
         }
     };
 
-    return { gameController, boardContainer, resetBoard, updateBoard };
+    buildBoard();
+
+    return { tiles, updateBoard };
 }
 
-function createTile(gb) {
+function createTile() {
 
-    // Create tile element and add to document
+    const boardContainer = document.querySelector(".board-container");
     const tileElement = document.createElement("button");
-    tileElement.classList.add("tile");
-    tileElement.addEventListener("click", placeChip());
-
-    const gameBoard = gb;
-    gameBoard.boardContainer.appendChild(tileElement);
-
     let value = -1;
-
+    
     const placeChip = () => {
 
-        value = gb.gameController.getCurrentPlayerIndex();
+        value = gameController.currentPlayerIndex;
 
         updateTile();
+
+        gameController.nextTurn();
     }
 
     const updateTile = () => {
@@ -108,13 +100,17 @@ function createTile(gb) {
 
             default:
 
-                tileElement.style.backgroundColor = "white";
+                tileElement.style.backgroundColor = "var(--off-white)";
                 break;
 
         }
     };
 
-    return { updateTile };
+    tileElement.classList.add("tile");
+    tileElement.addEventListener("click", placeChip);
+    boardContainer.appendChild(tileElement);
+
+    return { boardContainer, tileElement, placeChip, updateTile };
 }
 
 function createPlayer(name) {

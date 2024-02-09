@@ -58,25 +58,38 @@ table {
 /* END Meyer Reset */
 
 body {
+    font-family: 'Times New Roman', Times, serif;
     width: 100vw;
     height: 100vh;
     display: grid;
     grid-template-rows: 3em 1fr;
+
+    --off-white: rgb(220,210,200);
+    --drab: rgb(70,70,50);
 }
 
 .header {
-    background-color: greenyellow;
+    font-weight: 800;
+    color: var(--off-white);
+    background-color: var(--drab);
+    padding: 0 10% 0 10%;
+    line-height: 3em;
 }
 
 .game-area {
-
+    background-color: var(--off-white);
 }
 
 .board-container {
-    background-color: blue;
-    margin: 0 auto;
-    height: min(75vh, 75vw); /* always fit on screen */
-    aspect-ratio: 1 / 1;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    padding: 1%;
+    gap: 1%;
+    background-color: var(--drab);
+    margin: 10vh auto;
+    height: min(60vh, 60vw); /* always fit on screen */
+    width: min(60vh, 60vw);
 }
 
 .tile {
