@@ -62,18 +62,30 @@ body {
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-rows: 3em 1fr;
+    grid-template-rows: 6em 2em 1fr;
 
     --off-white: rgb(220,210,200);
     --drab: rgb(70,70,50);
 }
 
 .header {
+    display: flex;
+    justify-content: space-between;
     font-weight: 800;
     color: var(--off-white);
     background-color: var(--drab);
-    padding: 0 10% 0 10%;
-    line-height: 3em;
+    padding: 2em 10% 0 10%;
+}
+
+.header h1 {
+    font-size: 2em;
+}
+
+.current-turn {
+    color: var(--off-white);
+    text-align: center;
+    line-height: 1.75em;
+    font-weight: 800;
 }
 
 .game-area {
@@ -93,5 +105,78 @@ body {
 }
 
 .tile {
+    border: none;
+    box-shadow: inset 2px 2px 4px 4px rgba(0,0,0,0.1);
+    background-color: var(--off-white);
+}
 
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.names-button, .reset-button {
+    color: var(--off-white);
+    width: 8em;
+    font-weight: 800;
+    height: 2.5em;
+    border: 4px solid var(--off-white);
+    border-radius: 1.25em;
+}
+
+.names-button {
+    background-color: var(--drab);
+}
+
+.reset-button {
+    background-color: rgb(120,50,50);
+}
+
+.names-dialog {
+    border: 4px solid black;
+    padding: 40px;
+}
+
+.names-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.input, .dialog-submit, .names-dialog {
+    border-radius: 4px;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-weight: 800;
+    gap: 5px;
+    padding: 10px;
+}
+
+.red {
+    background-color: #ED411C;
+}
+
+.blue {
+    background-color: #666DE9;
+}
+
+/* smaller screens */
+@media only screen and (max-width: 600px) {
+
+    body {
+        grid-template-rows: 6em 2em 1fr;
+    }
+
+    .header {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 10% 0 10%;
+        gap: 10px;
+    }
 }
